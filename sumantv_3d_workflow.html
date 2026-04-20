@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SumanTV Health · 3D AI Video Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06080d;
+    --surface: #0e1018;
+    --card: #13161f;
+    --border: #1c2035;
+    --glow: #00e5ff;
+    --warm: #ff6b35;
+    --gold: #f0c040;
+    --green: #39d98a;
+    --purple: #b06aff;
+    --text: #dde2f0;
+    --muted: #4a5270;
+    --dim: #252a3d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 60px 0 56px;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--glow);
+    border: 1px solid rgba(0,229,255,0.25);
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+    background: rgba(0,229,255,0.05);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--glow) 50%, var(--warm) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 18px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* COST BANNER */
+  .cost-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin: 40px 0 60px;
+    padding: 20px 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  .cost-item { text-align: center; }
+  .cost-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .cost-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+
+  .cost-div { width: 1px; height: 40px; background: var(--border); }
+
+  /* SECTION LABEL */
+  .sec-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sec-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PIPELINE FLOW ── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 64px;
+    position: relative;
+  }
+
+  .pipeline::before {
+    content: '';
+    position: absolute;
+    left: 28px; top: 60px; bottom: 60px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--glow), var(--warm));
+    opacity: 0.3;
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    padding: 24px 0;
+    position: relative;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stage:nth-child(1) { animation-delay: 0.05s; }
+  .stage:nth-child(2) { animation-delay: 0.1s; }
+  .stage:nth-child(3) { animation-delay: 0.15s; }
+  .stage:nth-child(4) { animation-delay: 0.2s; }
+  .stage:nth-child(5) { animation-delay: 0.25s; }
+  .stage:nth-child(6) { animation-delay: 0.3s; }
+  .stage:nth-child(7) { animation-delay: 0.35s; }
+
+  .stage-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stage-body {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    transition: border-color 0.2s;
+  }
+
+  .stage-body:hover { border-color: var(--dim); }
+
+  .stage-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .stage-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  .stage-title {
+    font-size: 17px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .time-pill {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .stage-desc {
+    font-size: 14px;
+    color: #8892b0;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  /* Tool chips inside stages */
+  .tool-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tool-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: default;
+  }
+
+  .chip-primary { background: rgba(0,229,255,0.08); border-color: rgba(0,229,255,0.2); color: var(--glow); }
+  .chip-alt     { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.2); color: var(--warm); }
+  .chip-bonus   { background: rgba(176,106,255,0.08); border-color: rgba(176,106,255,0.2); color: var(--purple); }
+  .chip-green   { background: rgba(57,217,138,0.08); border-color: rgba(57,217,138,0.2); color: var(--green); }
+  .chip-gold    { background: rgba(240,192,64,0.08); border-color: rgba(240,192,64,0.2); color: var(--gold); }
+
+  .chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  .tip-box {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: rgba(0,229,255,0.04);
+    border-left: 3px solid rgba(0,229,255,0.3);
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tip-box strong { color: var(--glow); font-weight: 600; }
+
+  /* Icon bg colors */
+  .ic-script  { background: rgba(240,192,64,0.12); }
+  .ic-vo      { background: rgba(57,217,138,0.12); }
+  .ic-mj      { background: rgba(0,229,255,0.12); }
+  .ic-3d      { background: rgba(176,106,255,0.12); }
+  .ic-video   { background: rgba(255,107,53,0.12); }
+  .ic-edit    { background: rgba(255,200,60,0.12); }
+  .ic-publish { background: rgba(57,217,138,0.12); }
+
+  /* ── TOOL STACK TABLE ── */
+  .tool-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin-bottom: 64px;
+  }
+
+  .tool-table thead th {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 16px 8px;
+    text-align: left;
+  }
+
+  .tool-table tbody tr {
+    background: var(--card);
+    border-radius: 12px;
+    transition: background 0.15s;
+  }
+
+  .tool-table tbody tr:hover { background: var(--surface); }
+
+  .tool-table td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tool-table td:first-child {
+    border-left: 1px solid var(--border);
+    border-radius: 12px 0 0 12px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .tool-table td:last-child {
+    border-right: 1px solid var(--border);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .cost-cell { color: var(--gold); font-weight: 600; font-family: 'Bebas Neue', sans-serif; font-size: 16px; }
+  .role-cell { color: var(--muted); }
+
+  .rating {
+    display: flex;
+    gap: 3px;
+  }
+  .star { color: var(--gold); font-size: 12px; }
+  .star.off { color: var(--dim); }
+
+  /* TIMELINE */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 64px;
+  }
+
+  .tl-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .tl-day {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .tl-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* OUTPUT TARGETS */
+  .output-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .output-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .output-card:hover { border-color: var(--dim); transform: translateY(-2px); }
+
+  .oc-icon { font-size: 28px; margin-bottom: 10px; }
+  .oc-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .oc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="tag">SumanTV Health · Production OS</div>
+    <h1>3D AI Video<br>Workflow</h1>
+    <p class="hero-sub">End-to-end pipeline from script to YouTube publish — built for your 20+ health channel network.</p>
+  </div>
+
+  <!-- COST BANNER -->
+  <div class="cost-banner">
+    <div class="cost-item">
+      <div class="cost-num">~₹17K</div>
+      <div class="cost-label">Monthly Tool Cost</div>
+    </div>
+    <div class="cost-div"></div>
+    <div class="cost-item">
+      <div class="cost-num">4–6</div>
+      <div class="cost-label">Videos Per Month</div>
+    </div>
+    <div class="cost-div"></div>
+    <div class="cost-item">
+      <div class="cost-num">3–4</div>
+      <div class="cost-label">Days Per Video</div>
+    </div>
+    <div class="cost-div"></div>
+    <div class="cost-item">
+      <div class="cost-num">3–4</div>
+      <div class="cost-label">Team Members Needed</div>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="sec-label">Production Pipeline</div>
+  <div class="pipeline">
+
+    <!-- STAGE 1 -->
+    <div class="stage">
+      <div class="stage-icon ic-script">📝</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 01</span>
+          <span class="stage-title">Script & VO Blueprint</span>
+          <span class="time-pill">Day 1 · 2–3 hrs</span>
+        </div>
+        <p class="stage-desc">Write the Telugu VO script with scene-by-scene breakdown. Define what each visual must communicate — especially the core concept scene. Timing is everything: each line of VO must map to a specific visual beat.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-gold"><div class="chip-dot"></div>Claude / ChatGPT</div>
+          <div class="tool-chip chip-green"><div class="chip-dot"></div>Google Docs</div>
+        </div>
+        <div class="tip-box"><strong>SumanTV tip:</strong> Write VO in Telugu first, then write English visual descriptions per scene. Keep VO lines short — 6–10 words max per line for natural breathing rhythm.</div>
+      </div>
+    </div>
+
+    <!-- STAGE 2 -->
+    <div class="stage">
+      <div class="stage-icon ic-vo">🎙️</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 02</span>
+          <span class="stage-title">Voice Over Recording</span>
+          <span class="time-pill">Day 1 · 1–2 hrs</span>
+        </div>
+        <p class="stage-desc">Record the Telugu VO with proper pacing. Keep silence gaps between sections — these are where visual cuts happen. Export as WAV at 48kHz. This audio file becomes the master timeline for all visual generation.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-primary"><div class="chip-dot"></div>ElevenLabs (AI VO)</div>
+          <div class="tool-chip chip-alt"><div class="chip-dot"></div>Human VO (preferred)</div>
+          <div class="tool-chip chip-bonus"><div class="chip-dot"></div>Audacity (cleanup)</div>
+        </div>
+        <div class="tip-box"><strong>ElevenLabs note:</strong> Telugu voice quality is improving. Use "Multilingual v2" model. Still best to use a human VO for authenticity on health content — trust factor matters.</div>
+      </div>
+    </div>
+
+    <!-- STAGE 3 -->
+    <div class="stage">
+      <div class="stage-icon ic-mj">🎨</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 03</span>
+          <span class="stage-title">Static Frame Generation</span>
+          <span class="time-pill">Day 1–2 · 3–4 hrs</span>
+        </div>
+        <p class="stage-desc">Generate all key still frames — cutaway diagrams, opening room shots, infographic bases, closing frames. These become either standalone scenes or the starting image for video generation in Stage 4.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-primary"><div class="chip-dot"></div>Midjourney v6</div>
+          <div class="tool-chip chip-alt"><div class="chip-dot"></div>Adobe Firefly</div>
+          <div class="tool-chip chip-bonus"><div class="chip-dot"></div>DALL·E 3</div>
+        </div>
+        <div class="tip-box"><strong>Workflow:</strong> Generate 4 variants per scene → pick best → upscale (U1–U4) → export PNG. Save all raw exports in a /frames folder organized by scene number.</div>
+      </div>
+    </div>
+
+    <!-- STAGE 4 -->
+    <div class="stage">
+      <div class="stage-icon ic-3d">⚡</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 04</span>
+          <span class="stage-title">3D Motion & Video Generation</span>
+          <span class="time-pill">Day 2–3 · 4–6 hrs</span>
+        </div>
+        <p class="stage-desc">Animate the static frames into motion clips. This is the highest-effort stage. Use image-to-video for consistent look, text-to-video for abstract particle scenes. Generate 2x more clips than needed — only ~60% will be usable.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-primary"><div class="chip-dot"></div>Kling AI · Motion loops</div>
+          <div class="tool-chip chip-alt"><div class="chip-dot"></div>RunwayML Gen-3 · Hero scenes</div>
+          <div class="tool-chip chip-bonus"><div class="chip-dot"></div>Sora · Physics scenes</div>
+          <div class="tool-chip chip-green"><div class="chip-dot"></div>Hailuo · Camera moves</div>
+        </div>
+        <div class="tip-box">
+          <strong>Scene routing guide:</strong><br>
+          Particle physics (compressor, airflow) → <strong style="color:var(--warm)">Kling AI</strong><br>
+          Split comparisons, narrative transitions → <strong style="color:var(--purple)">RunwayML</strong><br>
+          Camera pullbacks, environment shots → <strong style="color:var(--green)">Hailuo</strong><br>
+          Physically accurate fluid/gas motion → <strong style="color:var(--glow)">Sora</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 5 -->
+    <div class="stage">
+      <div class="stage-icon ic-3d">🧱</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 05</span>
+          <span class="stage-title">3D Model Assets (Optional)</span>
+          <span class="time-pill">Day 2 · 2 hrs</span>
+        </div>
+        <p class="stage-desc">For episodes requiring detailed component walkthroughs (AC internals, human organs, machinery), generate 3D models and render them as turntable videos. Skip this stage for simpler explainer topics.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-primary"><div class="chip-dot"></div>Meshy AI · Text→3D</div>
+          <div class="tool-chip chip-alt"><div class="chip-dot"></div>Spline · Interactive 3D</div>
+          <div class="tool-chip chip-bonus"><div class="chip-dot"></div>Blender · Rendering</div>
+        </div>
+        <div class="tip-box"><strong>Meshy tip:</strong> Use "Turntable render" export — gives you a 360° rotating video clip ready to drop into the timeline. No Blender skills needed.</div>
+      </div>
+    </div>
+
+    <!-- STAGE 6 -->
+    <div class="stage">
+      <div class="stage-icon ic-edit">✂️</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 06</span>
+          <span class="stage-title">Edit, Text Overlays & Sound</span>
+          <span class="time-pill">Day 3–4 · 4–5 hrs</span>
+        </div>
+        <p class="stage-desc">Assemble all clips on timeline synced to VO audio. Add Telugu text overlays, animated labels, sound design (whoosh, hum, bass), and color grade. This stage turns raw AI clips into a finished broadcast-quality video.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-gold"><div class="chip-dot"></div>CapCut Pro · Primary</div>
+          <div class="tool-chip chip-alt"><div class="chip-dot"></div>DaVinci Resolve · Grade</div>
+          <div class="tool-chip chip-primary"><div class="chip-dot"></div>Envato Elements · SFX</div>
+        </div>
+        <div class="tip-box">
+          <strong>Non-negotiable edits:</strong> Cut every 3–4 sec · Slow zoom on key frames · Motion blur on particles · Bass drop on compressor scene · Telugu labels via CapCut text (never rely on AI to render Telugu)
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 7 -->
+    <div class="stage">
+      <div class="stage-icon ic-publish">🚀</div>
+      <div class="stage-body">
+        <div class="stage-top">
+          <span class="stage-num">STAGE 07</span>
+          <span class="stage-title">Thumbnail & Publish</span>
+          <span class="time-pill">Day 4 · 1–2 hrs</span>
+        </div>
+        <p class="stage-desc">Create a high-contrast before/after thumbnail using the hook frame (hot room) and closing frame (cool room). Write keyword-rich Telugu title and description. Schedule across relevant channels in your health network.</p>
+        <div class="tool-row">
+          <div class="tool-chip chip-primary"><div class="chip-dot"></div>Canva Pro · Thumbnail</div>
+          <div class="tool-chip chip-alt"><div class="chip-dot"></div>VidIQ · SEO</div>
+          <div class="tool-chip chip-green"><div class="chip-dot"></div>YouTube Studio</div>
+        </div>
+        <div class="tip-box"><strong>Thumbnail formula:</strong> Before (red/hot) LEFT + After (blue/cool) RIGHT + Telugu text + face of curiosity or shock. This pattern consistently outperforms pure 3D thumbnails on Telugu health channels.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOOL STACK TABLE -->
+  <div class="sec-label">Full Tool Stack</div>
+  <table class="tool-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Role</th>
+        <th>Cost/mo</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Midjourney v6</td>
+        <td class="role-cell">Static frame generation, thumbnails, infographics</td>
+        <td class="cost-cell">$30</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div></td>
+      </tr>
+      <tr>
+        <td>Kling AI</td>
+        <td class="role-cell">Motion loops, particle animation, compressor/valve scenes</td>
+        <td class="cost-cell">$30</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span></div></td>
+      </tr>
+      <tr>
+        <td>RunwayML Gen-3</td>
+        <td class="role-cell">Hero narrative scenes, split comparisons, myth buster</td>
+        <td class="cost-cell">$95</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div></td>
+      </tr>
+      <tr>
+        <td>Sora (ChatGPT Plus)</td>
+        <td class="role-cell">Physically accurate gas/fluid motion, photorealistic environments</td>
+        <td class="cost-cell">$20</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span></div></td>
+      </tr>
+      <tr>
+        <td>Hailuo AI</td>
+        <td class="role-cell">Camera movements, pullbacks, environment pans</td>
+        <td class="cost-cell">Free–$10</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span></div></td>
+      </tr>
+      <tr>
+        <td>Meshy AI</td>
+        <td class="role-cell">3D model generation, turntable renders</td>
+        <td class="cost-cell">Free–$20</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span><span class="star off">★</span></div></td>
+      </tr>
+      <tr>
+        <td>CapCut Pro</td>
+        <td class="role-cell">Timeline editing, Telugu text overlays, export</td>
+        <td class="cost-cell">$10</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span></div></td>
+      </tr>
+      <tr>
+        <td>ElevenLabs</td>
+        <td class="role-cell">AI Telugu voice over (backup / volume production)</td>
+        <td class="cost-cell">$22</td>
+        <td><div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span><span class="star off">★</span></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PRODUCTION TIMELINE -->
+  <div class="sec-label">Per-Episode Timeline</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-day" style="color:var(--gold)">DAY 1</div>
+      <div class="tl-label">Script · VO Record · MJ Static Frames</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-day" style="color:var(--glow)">DAY 2</div>
+      <div class="tl-label">Kling loops · Meshy 3D models · Runway hero clips</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-day" style="color:var(--warm)">DAY 3</div>
+      <div class="tl-label">Assembly on timeline · Text overlays · Sound design</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-day" style="color:var(--green)">DAY 4</div>
+      <div class="tl-label">Color grade · Thumbnail · SEO · Publish</div>
+    </div>
+  </div>
+
+  <!-- OUTPUT TARGETS -->
+  <div class="sec-label">One Episode → Multiple Outputs</div>
+  <div class="output-grid">
+    <div class="output-card">
+      <div class="oc-icon">▶️</div>
+      <div class="oc-title">YouTube Long (3–5 min)</div>
+      <div class="oc-desc">Primary explainer. Full 3D workflow. Publish on 2–3 relevant health channels.</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">📱</div>
+      <div class="oc-title">YouTube Shorts (60 sec)</div>
+      <div class="oc-desc">Hook + core concept only. Vertical crop. Re-use same AI clips.</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">📸</div>
+      <div class="oc-title">Instagram Reels</div>
+      <div class="oc-desc">Same as Shorts. Add Instagram-native text style for higher reach.</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">💬</div>
+      <div class="oc-title">WhatsApp Status Clips</div>
+      <div class="oc-desc">15 sec myth buster clip. High share rate on Telugu health audiences.</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">🖼️</div>
+      <div class="oc-title">Static Infographic</div>
+      <div class="oc-desc">MJ-generated cycle diagram. Post as carousel on Instagram / Facebook.</div>
+    </div>
+  </div>
+
+  <footer>SUMANTV HEALTH · 3D AI VIDEO PRODUCTION WORKFLOW · BUILT FOR 20+ CHANNEL NETWORK</footer>
+
+</div>
+</body>
+</html>

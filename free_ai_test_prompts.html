@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI Video Tool · Test Prompts</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Clash+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080a0f;
+  --s1:#0e1118;
+  --s2:#141720;
+  --bd:#1e2235;
+  --hailuo:#00ff88;
+  --kling:#ff5e2e;
+  --pika:#c084fc;
+  --runway:#38bdf8;
+  --sora:#fbbf24;
+  --text:#dde4f5;
+  --dim:#3a4260;
+  --muted:#4a5580;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* GRID TEXTURE */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);
+  background-size:40px 40px;opacity:.18;pointer-events:none;z-index:0;
+}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:48px 20px 80px}
+
+/* HEADER */
+header{text-align:center;padding:48px 0 52px;position:relative}
+.h-eyebrow{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:20px;
+}
+h1{
+  font-family:'Space Mono',monospace;
+  font-size:clamp(26px,5vw,52px);
+  font-weight:700;line-height:1.1;margin-bottom:8px;
+}
+h1 em{font-style:normal;color:var(--hailuo)}
+.h-sub{font-size:14px;color:var(--muted);margin-bottom:36px;line-height:1.6}
+
+/* TOOL TABS */
+.tabs{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:48px;
+}
+.tab{
+  font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+  padding:8px 18px;border-radius:8px;border:1.5px solid transparent;
+  cursor:pointer;transition:all .18s;background:var(--s1);letter-spacing:.5px;
+}
+.tab[data-t="all"]{border-color:var(--bd);color:var(--text)}
+.tab[data-t="hailuo"]{border-color:rgba(0,255,136,.25);color:var(--hailuo)}
+.tab[data-t="kling"]{border-color:rgba(255,94,46,.25);color:var(--kling)}
+.tab[data-t="pika"]{border-color:rgba(192,132,252,.25);color:var(--pika)}
+.tab[data-t="runway"]{border-color:rgba(56,189,248,.25);color:var(--runway)}
+.tab[data-t="sora"]{border-color:rgba(251,191,36,.25);color:var(--sora)}
+.tab.active,.tab:hover{background:currentColor;color:var(--bg)!important}
+
+/* TOOL SECTIONS */
+.tool-section{margin-bottom:48px;display:block}
+.tool-section.hidden{display:none}
+
+.tool-header{
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+  padding:16px 20px;border-radius:14px;border:1.5px solid var(--bd);
+  background:var(--s1);
+}
+.tool-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.tool-name{font-family:'Space Mono',monospace;font-size:16px;font-weight:700}
+.tool-url{
+  font-size:11px;font-family:'Space Mono',monospace;
+  padding:4px 10px;border-radius:6px;background:var(--s2);
+  border:1px solid var(--bd);color:var(--muted);margin-left:auto;
+  text-decoration:none;transition:color .15s;
+}
+.tool-url:hover{color:var(--text)}
+.free-badge{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;background:rgba(0,255,136,.1);
+  border:1px solid rgba(0,255,136,.2);color:var(--hailuo);white-space:nowrap;
+}
+
+/* PROMPT CARDS */
+.prompts-grid{display:flex;flex-direction:column;gap:14px}
+
+.pcard{
+  background:var(--s1);border:1.5px solid var(--bd);
+  border-radius:16px;overflow:hidden;transition:border-color .2s;
+}
+.pcard:hover{border-color:var(--dim)}
+
+.pcard-head{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;border-bottom:1px solid var(--bd);
+}
+.scene-tag{
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:1px;color:var(--muted);
+}
+.scene-name{font-size:14px;font-weight:700;flex:1}
+.diff-pill{
+  font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 9px;border-radius:4px;
+}
+.diff-easy{background:rgba(0,255,136,.08);color:var(--hailuo);border:1px solid rgba(0,255,136,.2)}
+.diff-med{background:rgba(251,191,36,.08);color:var(--sora);border:1px solid rgba(251,191,36,.2)}
+.diff-hard{background:rgba(255,94,46,.08);color:var(--kling);border:1px solid rgba(255,94,46,.2)}
+
+.pcard-body{padding:16px 18px}
+
+.prompt-label{
+  font-size:10px;font-family:'Space Mono',monospace;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px;
+}
+
+.prompt-text{
+  background:var(--bg);border:1px solid var(--bd);border-radius:10px;
+  padding:14px 44px 14px 14px;
+  font-family:'Space Mono',monospace;font-size:12px;
+  line-height:1.75;color:#a8b4d0;
+  position:relative;margin-bottom:12px;
+  white-space:pre-wrap;word-break:break-word;
+}
+
+.copy-btn{
+  position:absolute;top:10px;right:10px;
+  background:var(--bd);border:none;border-radius:6px;
+  color:var(--muted);padding:5px 10px;
+  font-family:'Space Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:.5px;cursor:pointer;transition:all .15s;text-transform:uppercase;
+}
+.copy-btn:hover{background:var(--text);color:var(--bg)}
+.copy-btn.ok{background:var(--hailuo);color:var(--bg)}
+
+.params-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.param{
+  font-size:10px;padding:3px 9px;border-radius:5px;
+  background:rgba(255,255,255,.03);color:var(--dim);
+  border:1px solid var(--bd);font-family:'Space Mono',monospace;
+}
+
+.tip{
+  font-size:12px;color:var(--muted);line-height:1.6;
+  border-left:2px solid var(--bd);padding-left:10px;
+}
+.tip b{color:var(--text)}
+
+/* HAILUO color overrides */
+.hailuo .pcard{} .hailuo .pcard:hover{border-color:rgba(0,255,136,.3)}
+.hailuo .scene-name{color:var(--hailuo)}
+/* KLING */
+.kling .pcard:hover{border-color:rgba(255,94,46,.3)}
+.kling .scene-name{color:var(--kling)}
+/* PIKA */
+.pika .pcard:hover{border-color:rgba(192,132,252,.3)}
+.pika .scene-name{color:var(--pika)}
+/* RUNWAY */
+.runway .pcard:hover{border-color:rgba(56,189,248,.3)}
+.runway .scene-name{color:var(--runway)}
+/* SORA */
+.sora .pcard:hover{border-color:rgba(251,191,36,.3)}
+.sora .scene-name{color:var(--sora)}
+
+/* COMPARISON TABLE */
+.cmp-table{
+  width:100%;border-collapse:separate;border-spacing:0 6px;
+  margin-bottom:48px;
+}
+.cmp-table thead th{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);padding:0 14px 8px;text-align:left;
+}
+.cmp-table tbody tr{background:var(--s1);transition:background .15s}
+.cmp-table tbody tr:hover{background:var(--s2)}
+.cmp-table td{
+  padding:13px 14px;font-size:13px;
+  border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);
+}
+.cmp-table td:first-child{border-left:1px solid var(--bd);border-radius:10px 0 0 10px;font-weight:700}
+.cmp-table td:last-child{border-right:1px solid var(--bd);border-radius:0 10px 10px 0}
+.free-c{color:var(--hailuo);font-family:'Space Mono',monospace;font-size:12px}
+.best-c{color:var(--sora);font-size:12px}
+
+/* SECTION LABEL */
+.sec-lbl{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:20px;display:flex;align-items:center;gap:12px;
+}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+footer{
+  text-align:center;font-family:'Space Mono',monospace;
+  font-size:10px;color:var(--muted);letter-spacing:2px;
+  padding-top:32px;border-top:1px solid var(--bd);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="h-eyebrow">SumanTV Health · AC Episode 02</div>
+  <h1>Free AI Video<br><em>Test Prompts</em></h1>
+  <p class="h-sub">Ready-to-paste prompts for Hailuo · Kling · Pika · Runway · Sora<br>All on free tiers. Start testing today.</p>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" data-t="all">All Tools</button>
+  <button class="tab" data-t="hailuo">Hailuo AI</button>
+  <button class="tab" data-t="kling">Kling AI</button>
+  <button class="tab" data-t="pika">Pika Labs</button>
+  <button class="tab" data-t="runway">RunwayML</button>
+  <button class="tab" data-t="sora">Sora</button>
+</div>
+
+<!-- COMPARISON TABLE -->
+<div class="sec-lbl">Free Tier Comparison</div>
+<table class="cmp-table">
+  <thead><tr><th>Tool</th><th>Free Credits</th><th>Best For</th><th>Credit Card?</th></tr></thead>
+  <tbody>
+    <tr>
+      <td style="color:var(--hailuo)">Hailuo AI</td>
+      <td class="free-c">10 videos/day</td>
+      <td class="best-c">Best free ratio — start here</td>
+      <td style="color:var(--hailuo);font-size:12px">Not required</td>
+    </tr>
+    <tr>
+      <td style="color:var(--kling)">Kling AI</td>
+      <td class="free-c">166 credits/mo</td>
+      <td class="best-c">Particle / motion loops</td>
+      <td style="color:var(--hailuo);font-size:12px">Not required</td>
+    </tr>
+    <tr>
+      <td style="color:var(--pika)">Pika Labs</td>
+      <td class="free-c">~150 credits/mo</td>
+      <td class="best-c">Add effects to existing clips</td>
+      <td style="color:var(--hailuo);font-size:12px">Not required</td>
+    </tr>
+    <tr>
+      <td style="color:var(--runway)">RunwayML</td>
+      <td class="free-c">125 credits (one time)</td>
+      <td class="best-c">Video-to-video restyle</td>
+      <td style="color:var(--sora);font-size:12px">Required</td>
+    </tr>
+    <tr>
+      <td style="color:var(--sora)">Sora</td>
+      <td class="free-c">Limited via ChatGPT Free</td>
+      <td class="best-c">Physically accurate gas/fluid</td>
+      <td style="color:var(--hailuo);font-size:12px">Not required</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ── HAILUO ── -->
+<div class="sec-lbl">Hailuo AI Prompts</div>
+<div class="tool-section hailuo" data-tool="hailuo">
+  <div class="tool-header">
+    <div class="tool-dot" style="background:var(--hailuo)"></div>
+    <div class="tool-name" style="color:var(--hailuo)">Hailuo AI</div>
+    <div class="free-badge">10 FREE/DAY</div>
+    <a class="tool-url" href="https://hailuoai.com" target="_blank">hailuoai.com ↗</a>
+  </div>
+  <div class="prompts-grid">
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 01</span>
+        <span class="scene-name">Outdoor Unit Heat Release</span>
+        <span class="diff-pill diff-easy">Easy</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Outdoor air conditioner unit mounted on a balcony wall, fan spinning at high speed, heat ripples and red glowing air radiating outward from the unit into the surrounding atmosphere, Indian apartment building exterior, cinematic lighting, slow motion, photorealistic, 4K<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 5s</span>
+          <span class="param">Motion: medium</span>
+          <span class="param">Camera: static</span>
+        </div>
+        <div class="tip"><b>Why test this first:</b> Simple scene, no complex physics. Hailuo handles exterior shots + fan motion very well. If this looks good, the tool is worth using for your channel.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 02</span>
+        <span class="scene-name">Room Temperature Shift</span>
+        <span class="diff-pill diff-easy">Easy</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Cinematic interior of a small Indian bedroom, camera slowly pulls back, room atmosphere transitions from warm orange-red haze to cool blue ambient light as AC unit activates, heat waves disappearing and cool air settling, photorealistic, smooth transition<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 6s</span>
+          <span class="param">Camera: pull back</span>
+          <span class="param">Transition: warm→cool</span>
+        </div>
+        <div class="tip"><b>Key check:</b> Does the color temperature shift smoothly? This is your opening scene candidate.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 03</span>
+        <span class="scene-name">AC Vent Airflow Close-up</span>
+        <span class="diff-pill diff-med">Medium</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Extreme close-up macro shot of air conditioner vent slats, cool blue air flowing outward in visible streams, condensation forming on the vent edges, frost particles floating in slow motion, cinematic depth of field, dark moody background<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 5s</span>
+          <span class="param">Camera: macro</span>
+          <span class="param">DOF: shallow</span>
+        </div>
+        <div class="tip"><b>Tip:</b> This tests Hailuo's macro capability. Use as a B-roll insert cut.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── KLING ── -->
+<div class="sec-lbl" style="margin-top:40px">Kling AI Prompts</div>
+<div class="tool-section kling" data-tool="kling">
+  <div class="tool-header">
+    <div class="tool-dot" style="background:var(--kling)"></div>
+    <div class="tool-name" style="color:var(--kling)">Kling AI</div>
+    <div class="free-badge">166 CREDITS/MO</div>
+    <a class="tool-url" href="https://klingai.com" target="_blank">klingai.com ↗</a>
+  </div>
+  <div class="prompts-grid">
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 01</span>
+        <span class="scene-name">Compressor Particle Compression</span>
+        <span class="diff-pill diff-med">Medium</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">3D scientific visualization of blue gas particles being compressed tightly inside a cylindrical metal compressor, particles moving rapidly closer together, color shifting from cool blue to glowing red-orange as pressure and temperature increases, pulsing heartbeat rhythm, dark background, macro zoom<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 5s</span>
+          <span class="param">Loop: yes</span>
+          <span class="param">Camera: zoom in</span>
+        </div>
+        <div class="tip"><b>Core test:</b> Kling excels at particle transformation. Blue→red color shift is the KEY visual for this scene. If the color transition looks good, use Kling for all particle scenes.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 02</span>
+        <span class="scene-name">Expansion Valve Pressure Drop</span>
+        <span class="diff-pill diff-med">Medium</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Hot red gas particles rushing through a narrow metal valve opening, particles explosively expanding outward on the exit side, rapidly transitioning from glowing red to icy blue as temperature drops, frost crystals forming on metal pipe edges, macro slow motion, dark industrial background<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 5s</span>
+          <span class="param">Slow motion: yes</span>
+          <span class="param">Camera: macro</span>
+        </div>
+        <div class="tip"><b>Visual goal:</b> Red → blue transformation through the valve. This is the most dramatic visual in the episode.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 03</span>
+        <span class="scene-name">Evaporator Heat Absorption</span>
+        <span class="diff-pill diff-hard">Hard</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Glowing icy blue evaporator coils inside an AC unit, warm red heat particles flowing from surrounding air into the coils and transforming into cool blue particles, frost forming on coil surfaces, smooth magical energy transfer animation, dark environment, cinematic close-up<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 6s</span>
+          <span class="param">Style: sci-fi</span>
+          <span class="param">Motion: smooth</span>
+        </div>
+        <div class="tip"><b>Expect 3–4 attempts</b> to get the red→blue particle absorption looking clean. Worth the credits — this is your "magic moment" scene.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── PIKA ── -->
+<div class="sec-lbl" style="margin-top:40px">Pika Labs Prompts</div>
+<div class="tool-section pika" data-tool="pika">
+  <div class="tool-header">
+    <div class="tool-dot" style="background:var(--pika)"></div>
+    <div class="tool-name" style="color:var(--pika)">Pika Labs</div>
+    <div class="free-badge">~150 CREDITS/MO</div>
+    <a class="tool-url" href="https://pika.art" target="_blank">pika.art ↗</a>
+  </div>
+  <div class="prompts-grid">
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 01</span>
+        <span class="scene-name">Heat Particle Dissolve Effect</span>
+        <span class="diff-pill diff-easy">Easy</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt (Text-to-Video)</div>
+        <div class="prompt-text">A room filled with glowing red heat particles that slowly get pulled toward an air conditioner unit on the wall, particles dissolving and disappearing as they enter the AC, room gradually shifting from red warm haze to cool blue calm, cinematic, slow motion<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Mode: text-to-video</span>
+          <span class="param">Duration: 5s</span>
+          <span class="param">Effect: dissolve</span>
+        </div>
+        <div class="tip"><b>Pika strength:</b> The dissolve/particle-pull effect is a signature Pika capability. This is their best use case for your AC episode.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 02</span>
+        <span class="scene-name">Pikaffects — Heat Explosion</span>
+        <span class="diff-pill diff-easy">Easy</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt (Use Pikaffects panel)</div>
+        <div class="prompt-text">Upload: any still image of a hot room or compressor
+Then in Pikaffects select: "Explode" effect
+Modify prompt: red heat energy exploding outward from compressor, particles scattering in all directions, dramatic energy release, dark background<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Mode: image + Pikaffects</span>
+          <span class="param">Effect: Explode</span>
+          <span class="param">Duration: 3s</span>
+        </div>
+        <div class="tip"><b>No prompt engineering needed.</b> Upload a Midjourney-generated compressor image → apply Explode effect → instant dramatic scene. Very fast to test.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 03</span>
+        <span class="scene-name">Freeze / Ice Formation Effect</span>
+        <span class="diff-pill diff-easy">Easy</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt (Use Pikaffects panel)</div>
+        <div class="prompt-text">Upload: any still image of the evaporator coils or indoor AC unit
+Then in Pikaffects select: "Freeze" effect
+Modify prompt: ice and frost forming rapidly across evaporator coils, crystalline frost spreading outward, icy blue glow intensifying<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Mode: image + Pikaffects</span>
+          <span class="param">Effect: Freeze</span>
+          <span class="param">Duration: 3s</span>
+        </div>
+        <div class="tip"><b>Perfect for:</b> Evaporator scene. The Freeze effect is one of Pika's best and maps directly to your AC cold side explanation.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── RUNWAY ── -->
+<div class="sec-lbl" style="margin-top:40px">RunwayML Prompts</div>
+<div class="tool-section runway" data-tool="runway">
+  <div class="tool-header">
+    <div class="tool-dot" style="background:var(--runway)"></div>
+    <div class="tool-name" style="color:var(--runway)">RunwayML</div>
+    <div class="free-badge">125 CREDITS (1-TIME)</div>
+    <a class="tool-url" href="https://runwayml.com" target="_blank">runwayml.com ↗</a>
+  </div>
+  <div class="prompts-grid">
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 01</span>
+        <span class="scene-name">Heat Removal Concept (KEY SCENE)</span>
+        <span class="diff-pill diff-med">Medium</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt (Gen-3 Alpha)</div>
+        <div class="prompt-text">Split screen animation. Left side: interior room with swirling red heat particles filling the air. Right side: outdoor AC unit expelling glowing red air outward into the environment. Large white arrows indicating heat direction flowing OUT from room to outside. Clean educational motion graphics style, dark background<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Model: Gen-3 Alpha</span>
+          <span class="param">Duration: 6s</span>
+          <span class="param">Mode: text-to-video</span>
+        </div>
+        <div class="tip"><b>This is your most important scene.</b> Use these credits here first. The split-screen with arrows must clearly show heat going OUT — not cool coming in. Spend 2–3 generations to get it right.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 02</span>
+        <span class="scene-name">Video-to-Video Restyle Test</span>
+        <span class="diff-pill diff-hard">Hard</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt (Video-to-Video mode)</div>
+        <div class="prompt-text">Upload: any basic reference video of AC unit or room
+Style prompt: cinematic 3D scientific visualization, dark background, glowing particle effects, blue and red color coding for cold and hot, educational motion graphics, photorealistic lighting, 4K quality
+Structure preservation: 70%<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Mode: video-to-video</span>
+          <span class="param">Structure: 70%</span>
+          <span class="param">Style strength: high</span>
+        </div>
+        <div class="tip"><b>This is Runway's superpower.</b> Upload a rough phone-shot video of an AC unit → transform it into a cinematic 3D-looking clip. Best ROI for your credits.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 03</span>
+        <span class="scene-name">Myth Buster Split Comparison</span>
+        <span class="diff-pill diff-med">Medium</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt (Gen-3 Alpha)</div>
+        <div class="prompt-text">Side by side comparison animation of two identical rooms. Left: AC remote showing 24°C, compressor running steadily, calm electricity meter. Right: AC remote showing 16°C, compressor working intensely, electricity meter spinning fast. Text overlay: SAME COOLING SPEED. Clean motion graphics, dark background<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Model: Gen-3 Alpha</span>
+          <span class="param">Duration: 6s</span>
+          <span class="param">Style: infographic</span>
+        </div>
+        <div class="tip"><b>High virality potential.</b> The "SAME COOLING SPEED" visual gets screenshot-shared on WhatsApp. Worth spending 2 generations on this.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SORA ── -->
+<div class="sec-lbl" style="margin-top:40px">Sora Prompts</div>
+<div class="tool-section sora" data-tool="sora">
+  <div class="tool-header">
+    <div class="tool-dot" style="background:var(--sora)"></div>
+    <div class="tool-name" style="color:var(--sora)">Sora (OpenAI)</div>
+    <div class="free-badge">FREE VIA CHATGPT</div>
+    <a class="tool-url" href="https://chatgpt.com" target="_blank">chatgpt.com ↗</a>
+  </div>
+  <div class="prompts-grid">
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 01</span>
+        <span class="scene-name">Refrigerant Gas Flow — Physics</span>
+        <span class="diff-pill diff-hard">Hard</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Physically accurate visualization of refrigerant gas flowing through copper pipes of an air conditioning system, gas compressed into dense hot red vapor, then cooling and expanding into icy blue mist, fluid dynamics simulation style, transparent pipe walls showing gas movement, scientific visualization, slow motion, cinematic<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 6s</span>
+          <span class="param">Style: scientific</span>
+          <span class="param">Physics: accurate</span>
+        </div>
+        <div class="tip"><b>Sora's unique advantage:</b> Physical accuracy of gas/fluid motion. No other free tool handles this as well. This is the refrigeration cycle scene only Sora can do properly.</div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head">
+        <span class="scene-tag">TEST 02</span>
+        <span class="scene-name">Room Heat Convection Currents</span>
+        <span class="diff-pill diff-med">Medium</span>
+      </div>
+      <div class="pcard-body">
+        <div class="prompt-label">Prompt</div>
+        <div class="prompt-text">Scientific visualization of thermal convection currents inside a room, warm red air rising from floor and furniture, cool blue air descending from AC unit above, invisible airflow patterns made visible through color-coded heat mapping, aerial view, fluid simulation aesthetic, educational, cinematic<button class="copy-btn" onclick="cp(this)">COPY</button></div>
+        <div class="params-row">
+          <span class="param">Duration: 6s</span>
+          <span class="param">View: aerial</span>
+          <span class="param">Style: thermal map</span>
+        </div>
+        <div class="tip"><b>Unique scene idea:</b> No other episode shows convection currents visually. This makes your content stand out from every other AC explainer on YouTube.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TESTING CHECKLIST -->
+<div class="sec-lbl" style="margin-top:48px">Testing Checklist</div>
+<div style="background:var(--s1);border:1.5px solid var(--bd);border-radius:16px;padding:24px 26px;font-size:14px;line-height:2;">
+  <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">DAY 1 — FREE TEST PLAN</div>
+  <div>☐ &nbsp;Sign up to <span style="color:var(--hailuo)">Hailuo AI</span> → run TEST 01 (outdoor unit) → check quality</div>
+  <div>☐ &nbsp;Sign up to <span style="color:var(--kling)">Kling AI</span> → run TEST 01 (compressor) → check particle color shift</div>
+  <div>☐ &nbsp;Sign up to <span style="color:var(--pika)">Pika Labs</span> → upload MJ image → apply Freeze effect → instant win</div>
+  <div>☐ &nbsp;Open <span style="color:var(--sora)">ChatGPT</span> → run Sora TEST 01 → check gas flow physics</div>
+  <div>☐ &nbsp;Sign up to <span style="color:var(--runway)">RunwayML</span> → save 125 credits → use only on KEY SCENE split-screen</div>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd);font-size:13px;color:var(--muted)">
+    Total time: ~3 hours &nbsp;·&nbsp; Total cost: ₹0 &nbsp;·&nbsp; Expected usable clips: 4–6
+  </div>
+</div>
+
+<footer style="margin-top:48px">SUMANTV HEALTH · AC EPISODE 02 · FREE AI VIDEO TEST KIT</footer>
+
+</div>
+
+<script>
+// TABS
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const t = btn.dataset.t;
+    document.querySelectorAll('.tool-section,.sec-lbl').forEach(el=>{
+      if(t==='all'){el.classList.remove('hidden')}
+      else{
+        if(el.classList.contains('tool-section')){
+          el.classList.toggle('hidden', el.dataset.tool!==t);
+        } else {
+          el.classList.remove('hidden');
+        }
+      }
+    });
+  });
+});
+
+// COPY
+function cp(btn){
+  const box = btn.parentElement;
+  const txt = box.childNodes[0].textContent.trim();
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent='COPIED!';
+    btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok')},2000);
+  });
+}
+</script>
+</body>
+</html>
