@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suman TV × MyPursu — The NRI Life Management Ecosystem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-950: #07101f;
+    --navy-900: #0b1a33;
+    --navy-800: #12264a;
+    --ink: #0a1324;
+    --cream: #f7f3ea;
+    --cream-2: #efe8d8;
+    --paper: #fbf8f2;
+    --gold: #c79a3a;
+    --gold-2: #e5b94c;
+    --gold-soft: #d9b36a;
+    --magenta: #e6007e;      /* Suman TV pink */
+    --magenta-soft: #ff3a9a;
+    --rule: rgba(10, 19, 36, 0.12);
+    --rule-light: rgba(247, 243, 234, 0.18);
+    --mute: #5b6477;
+    --mute-dark: #8a9bb6;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.08 0 0 0 0 0.12 0 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== NAV ===== */
+  nav.top {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 22px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(247, 243, 234, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule);
+    transition: all .4s var(--ease);
+  }
+  nav.top .brand {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 14px;
+  }
+  nav.top .brand .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    padding: 4px 10px;
+    border: 1px solid var(--magenta);
+    border-radius: 999px;
+  }
+  nav.top .links {
+    display: flex; gap: 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  nav.top .links a {
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+  }
+  nav.top .links a:hover { opacity: 1; }
+  nav.top .cta {
+    padding: 10px 20px;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--ink);
+    transition: all .25s var(--ease);
+  }
+  nav.top .cta:hover { background: var(--magenta); border-color: var(--magenta); color: #fff; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    padding: 160px 48px 80px;
+    position: relative;
+    background: var(--cream);
+    overflow: hidden;
+  }
+  .hero .chapter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 48px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero .chapter::before {
+    content: ''; width: 36px; height: 1px; background: var(--magenta);
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(48px, 8vw, 120px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    max-width: 1400px;
+    margin-bottom: 48px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--magenta);
+  }
+  .hero h1 .underline {
+    position: relative;
+    white-space: nowrap;
+  }
+  .hero h1 .underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0.08em; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: grow 1.6s .8s var(--ease) forwards;
+  }
+  @keyframes grow { to { transform: scaleX(1); } }
+
+  .hero .lede {
+    font-size: 22px;
+    line-height: 1.45;
+    max-width: 720px;
+    color: var(--mute);
+    font-weight: 300;
+    margin-bottom: 56px;
+  }
+  .hero .cta-row { display: flex; gap: 20px; margin-bottom: 80px; flex-wrap: wrap; }
+  .btn-primary, .btn-ghost {
+    padding: 16px 32px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: all .3s var(--ease);
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn-primary:hover { background: var(--magenta); color: #fff; transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+  .btn-primary svg, .btn-ghost svg { width: 14px; height: 14px; transition: transform .3s; }
+  .btn-primary:hover svg, .btn-ghost:hover svg { transform: translateX(4px); }
+
+  .hero .meta-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 48px;
+    border-top: 1px solid var(--rule);
+    max-width: 1200px;
+  }
+  .hero .meta-row .item .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 10px;
+  }
+  .hero .meta-row .item .v {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .hero .meta-row .item .v strong {
+    color: var(--magenta);
+    font-weight: 500;
+  }
+
+  .hero .flourish {
+    position: absolute;
+    right: -80px;
+    top: 120px;
+    width: 540px;
+    height: 540px;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+  .hero .flourish svg { width: 100%; height: 100%; }
+
+  /* ===== SECTION SHELL ===== */
+  section { padding: 140px 48px; position: relative; }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .section-head { margin-bottom: 80px; max-width: 900px; }
+  .section-head .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-head .eyebrow::before {
+    content: ''; width: 36px; height: 1px; background: var(--magenta);
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin-bottom: 24px;
+  }
+  .section-head h2 em { font-style: italic; color: var(--magenta); font-weight: 400; }
+  .section-head .sub {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--mute);
+    font-weight: 300;
+    max-width: 720px;
+  }
+
+  .dark { background: var(--navy-950); color: var(--cream); }
+  .dark .section-head h2 { color: var(--cream); }
+  .dark .section-head .sub { color: var(--mute-dark); }
+
+  /* ===== PROBLEM ===== */
+  .problem { background: var(--paper); position: relative; }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .problem-quote {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(28px, 3.2vw, 42px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    position: sticky;
+    top: 140px;
+  }
+  .problem-quote .accent { color: var(--magenta); font-style: normal; font-weight: 400; }
+  .problem-quote .attrib {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-top: 32px;
+    font-style: normal;
+    display: block;
+  }
+
+  .friction-list { display: flex; flex-direction: column; }
+  .friction-item {
+    padding: 32px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 28px;
+    align-items: start;
+    transition: padding-left .4s var(--ease);
+  }
+  .friction-item:hover { padding-left: 12px; }
+  .friction-item:last-child { border-bottom: 1px solid var(--rule); }
+  .friction-item .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--magenta);
+    letter-spacing: 0.1em;
+    padding-top: 4px;
+  }
+  .friction-item h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    letter-spacing: -0.015em;
+  }
+  .friction-item p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--mute);
+  }
+  .friction-item .arrow {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .3s;
+  }
+  .friction-item:hover .arrow { background: var(--ink); border-color: var(--ink); }
+  .friction-item .arrow svg { width: 10px; height: 10px; transition: stroke .3s; }
+  .friction-item:hover .arrow svg path { stroke: var(--cream); }
+
+  /* ===== SOLUTION / ARCHITECTURE ===== */
+  .solution { background: var(--navy-950); color: var(--cream); position: relative; overflow: hidden; }
+  .solution::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top right, rgba(230,0,126,.14) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom left, rgba(199,154,58,.10) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .solution .section-head h2 { color: var(--cream); }
+  .solution .section-head .sub { color: var(--mute-dark); }
+
+  .arch-diagram { position: relative; padding: 80px 0 40px; }
+  .arch-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 48px;
+    align-items: stretch;
+    margin-bottom: 48px;
+  }
+  .arch-pillar {
+    padding: 40px 36px;
+    border: 1px solid rgba(247,243,234,.18);
+    background: rgba(247,243,234,.02);
+    backdrop-filter: blur(4px);
+    transition: all .4s var(--ease);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .arch-pillar.pink { border-color: rgba(230,0,126,.35); }
+  .arch-pillar.pink:hover {
+    border-color: var(--magenta);
+    background: rgba(230,0,126,.08);
+    transform: translateY(-4px);
+  }
+  .arch-pillar.gold { border-color: rgba(199,154,58,.35); }
+  .arch-pillar.gold:hover {
+    border-color: var(--gold);
+    background: rgba(199,154,58,.08);
+    transform: translateY(-4px);
+  }
+  .arch-pillar .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .arch-pillar.pink .tag { color: var(--magenta-soft); }
+  .arch-pillar.gold .tag { color: var(--gold); }
+  .arch-pillar h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--cream);
+  }
+  .arch-pillar p {
+    font-size: 15px;
+    color: var(--mute-dark);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+  .arch-pillar .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(247,243,234,.12);
+  }
+  .arch-pillar .stat .n {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .arch-pillar.pink .stat .n { color: var(--magenta-soft); }
+  .arch-pillar.gold .stat .n { color: var(--gold); }
+  .arch-pillar .stat .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute-dark);
+    line-height: 1.4;
+  }
+
+  .arch-bridge {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--gold) 0%, var(--gold-soft) 60%, transparent 75%);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    align-self: center;
+  }
+  .arch-bridge::before {
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    animation: pulse 3s infinite var(--ease);
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  .arch-bridge span {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--navy-950);
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 2;
+    letter-spacing: 0.02em;
+  }
+  .arch-base {
+    margin-top: 64px;
+    padding: 40px 0 0;
+    border-top: 1px solid rgba(247,243,234,.18);
+    text-align: center;
+  }
+  .arch-base .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .arch-base h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 34px;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    max-width: 760px;
+    margin: 0 auto;
+    line-height: 1.2;
+  }
+
+  /* ===== SUMAN TV SCALE (new) ===== */
+  .scale { background: var(--cream); position: relative; }
+  .scale-hero {
+    text-align: center;
+    padding: 40px 0 80px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 80px;
+  }
+  .scale-hero .big {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(80px, 14vw, 200px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--magenta);
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+  }
+  .scale-hero .big sup {
+    font-size: 0.4em;
+    top: -0.6em;
+    margin-left: 0.1em;
+    color: var(--ink);
+    vertical-align: super;
+  }
+  .scale-hero .big-label {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .scale-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+  .scale-metric {
+    padding: 32px 0;
+    border-top: 2px solid var(--ink);
+  }
+  .scale-metric.accent { border-top-color: var(--magenta); }
+  .scale-metric .v {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 52px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .scale-metric.accent .v { color: var(--magenta); }
+  .scale-metric .l {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 14px;
+    color: var(--mute);
+    line-height: 1.45;
+    max-width: 220px;
+  }
+
+  .scale-proof {
+    padding: 40px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .scale-proof .copy {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    max-width: 600px;
+  }
+  .scale-proof .copy em { font-style: italic; color: var(--magenta); }
+  .scale-proof .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    padding: 14px 22px;
+    border: 1px solid var(--magenta);
+    white-space: nowrap;
+  }
+
+  /* ===== AUDIENCE (Who Suman TV reaches) ===== */
+  .audience { background: var(--paper); }
+  .audience-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .audience-viz {
+    position: relative;
+    aspect-ratio: 1/1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .audience-viz svg { width: 100%; height: 100%; }
+  .audience-list h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 16px;
+  }
+  .audience-list p {
+    font-size: 16px;
+    color: var(--mute);
+    line-height: 1.55;
+    margin-bottom: 36px;
+  }
+  .audience-pills {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .aud-pill {
+    padding: 20px 22px;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    transition: all .3s;
+  }
+  .aud-pill:hover { border-color: var(--magenta); }
+  .aud-pill .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    margin-bottom: 10px;
+  }
+  .aud-pill .title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .aud-pill .desc {
+    font-size: 13px;
+    color: var(--mute);
+    line-height: 1.45;
+  }
+
+  /* ===== SERVICES FOR NRIS ===== */
+  .offerings { background: var(--cream); }
+  .offering-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+  }
+  .offering {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 40px;
+    transition: all .4s var(--ease);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+  }
+  .offering:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -20px rgba(10,19,36,.14);
+  }
+  .offering::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .5s var(--ease);
+  }
+  .offering:hover::before { transform: scaleX(1); }
+  .offering .idx {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--mute);
+    margin-bottom: 24px;
+  }
+  .offering .icon {
+    width: 44px; height: 44px;
+    margin-bottom: 32px;
+    color: var(--ink);
+  }
+  .offering h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .offering p {
+    font-size: 15px;
+    color: var(--mute);
+    line-height: 1.55;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+  .offering ul { list-style: none; }
+  .offering ul li {
+    padding: 6px 0;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .offering ul li::before {
+    content: ''; width: 4px; height: 4px; background: var(--gold); border-radius: 50%;
+  }
+  .offering.wide   { grid-column: span 6; }
+  .offering.tall   { grid-column: span 4; }
+  .offering.third  { grid-column: span 4; }
+  .offering.half   { grid-column: span 6; }
+
+  /* ===== PARTNERSHIP SERVICES (WHAT WE DO TOGETHER) ===== */
+  .together {
+    background: linear-gradient(180deg, var(--navy-950) 0%, #0d1a35 100%);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+  .together::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 30%, rgba(230,0,126,.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(199,154,58,.10) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .together .section-head h2 { color: var(--cream); }
+  .together .section-head .sub { color: var(--mute-dark); }
+  .together .section-head .eyebrow { color: var(--gold); }
+  .together .section-head .eyebrow::before { background: var(--gold); }
+
+  .together-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(247,243,234,.14);
+    border: 1px solid rgba(247,243,234,.14);
+  }
+  .tg-cell {
+    background: var(--navy-950);
+    padding: 48px 40px;
+    position: relative;
+    transition: all .4s var(--ease);
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tg-cell:hover { background: rgba(230,0,126,.06); }
+  .tg-cell .pair {
+    display: flex; gap: 8px;
+    margin-bottom: 28px;
+  }
+  .tg-cell .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border: 1px solid;
+  }
+  .tg-cell .chip.stv { color: var(--magenta-soft); border-color: var(--magenta); }
+  .tg-cell .chip.mp  { color: var(--gold); border-color: var(--gold); }
+  .tg-cell h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--cream);
+  }
+  .tg-cell p {
+    font-size: 15px;
+    color: var(--mute-dark);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+  .tg-cell .deliverables {
+    list-style: none;
+    padding-top: 20px;
+    border-top: 1px solid rgba(247,243,234,.12);
+  }
+  .tg-cell .deliverables li {
+    padding: 7px 0;
+    font-size: 13px;
+    color: var(--cream);
+    display: flex; align-items: flex-start; gap: 10px;
+    line-height: 1.4;
+  }
+  .tg-cell .deliverables li::before {
+    content: '→';
+    color: var(--gold);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  /* ===== MOAT / COMBINED ADVANTAGE ===== */
+  .moat { background: var(--navy-950); color: var(--cream); position: relative; overflow: hidden; }
+  .moat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .moat .visual {
+    position: relative;
+    aspect-ratio: 1/1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .moat .visual svg { width: 100%; height: 100%; }
+  .moat .copy h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(38px, 4.5vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+    color: var(--cream);
+  }
+  .moat .copy h3 em { font-style: italic; color: var(--magenta-soft); font-weight: 400; }
+  .moat .copy p {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--mute-dark);
+    margin-bottom: 24px;
+  }
+  .moat-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(247,243,234,.14);
+    margin-top: 12px;
+  }
+  .moat-stat .v {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 44px;
+    letter-spacing: -0.025em;
+    color: var(--magenta-soft);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .moat-stat .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mute-dark);
+  }
+
+  /* ===== HOW IT WORKS ===== */
+  .how { background: var(--paper); }
+  .how-flow { margin-top: 40px; }
+  .how-step {
+    display: grid;
+    grid-template-columns: 120px 1fr 1.2fr;
+    gap: 48px;
+    padding: 56px 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+    transition: all .4s var(--ease);
+  }
+  .how-step:last-child { border-bottom: 1px solid var(--rule); }
+  .how-step:hover { background: rgba(230,0,126,0.04); padding-left: 16px; padding-right: 16px; }
+  .how-step .n {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 96px;
+    color: var(--magenta);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+  }
+  .how-step h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .how-step .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .how-step p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  /* ===== STORIES ===== */
+  .stories { background: var(--cream); }
+  .stories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .story {
+    background: var(--navy-950);
+    color: var(--cream);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all .4s var(--ease);
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+  }
+  .story:hover { transform: translateY(-6px); }
+  .story::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle at top right, rgba(230,0,126,.3) 0%, transparent 70%);
+  }
+  .story .quote-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 96px;
+    line-height: 0.5;
+    color: var(--magenta-soft);
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+  .story h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.25;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+  }
+  .story p {
+    font-size: 15px;
+    color: var(--mute-dark);
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 28px;
+  }
+  .story .signature {
+    padding-top: 20px;
+    border-top: 1px solid rgba(247,243,234,.14);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--magenta-soft);
+  }
+  .story .signature .dest { color: var(--mute-dark); }
+
+  /* ===== TRUST ===== */
+  .trust { background: var(--paper); }
+  .trust-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .trust-copy h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+  }
+  .trust-copy h3 em { font-style: italic; color: var(--magenta); font-weight: 400; }
+  .trust-copy p {
+    font-size: 17px;
+    color: var(--mute);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .trust-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .trust-tile {
+    padding: 28px 24px;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    transition: all .3s;
+  }
+  .trust-tile:hover { border-color: var(--magenta); }
+  .trust-tile .n {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 42px;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .trust-tile .n .u { font-size: 18px; color: var(--magenta); vertical-align: top; margin-left: 2px; }
+  .trust-tile .l {
+    font-size: 13px;
+    color: var(--mute);
+    line-height: 1.45;
+  }
+  .testimonial {
+    padding: 56px 48px;
+    background: var(--navy-950);
+    color: var(--cream);
+    position: relative;
+  }
+  .testimonial::before {
+    content: '"';
+    position: absolute;
+    top: 12px; left: 32px;
+    font-family: 'Fraunces', serif;
+    font-size: 160px;
+    color: var(--magenta);
+    line-height: 1;
+    font-style: italic;
+  }
+  .testimonial blockquote {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1.4;
+    margin-left: 80px;
+    max-width: 800px;
+    letter-spacing: -0.01em;
+  }
+  .testimonial .attrib {
+    margin-left: 80px;
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--magenta-soft);
+  }
+
+  /* ===== BIZ MODEL ===== */
+  .biz { background: var(--cream); }
+  .biz-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  .biz-col {
+    padding: 40px 0;
+    border-top: 2px solid var(--ink);
+  }
+  .biz-col.pink { border-top-color: var(--magenta); }
+  .biz-col.gold { border-top-color: var(--gold); }
+  .biz-col .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 18px;
+  }
+  .biz-col h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .biz-col p {
+    font-size: 15px;
+    color: var(--mute);
+    line-height: 1.6;
+  }
+  .biz-col ul {
+    margin-top: 20px;
+    list-style: none;
+  }
+  .biz-col ul li {
+    padding: 10px 0;
+    border-top: 1px dashed var(--rule);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .biz-col ul li:first-child { border-top: none; }
+
+  /* ===== CTA ===== */
+  .cta-final {
+    background: var(--navy-950);
+    color: var(--cream);
+    padding: 160px 48px 120px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-final::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(230,0,126,.14) 0%, transparent 60%);
+  }
+  .cta-final .ornament {
+    width: 60px; height: 60px;
+    margin: 0 auto 40px;
+    color: var(--magenta-soft);
+  }
+  .cta-final h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 84px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+    max-width: 900px;
+    margin-left: auto; margin-right: auto;
+    position: relative;
+  }
+  .cta-final h2 em { font-style: italic; color: var(--magenta-soft); font-weight: 400; }
+  .cta-final p {
+    font-size: 20px;
+    color: var(--mute-dark);
+    margin-bottom: 56px;
+    max-width: 640px;
+    margin-left: auto; margin-right: auto;
+    position: relative;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  .cta-final .cta-row { justify-content: center; display: flex; gap: 20px; flex-wrap: wrap; }
+  .cta-final .btn-primary { background: var(--magenta); color: #fff; border-color: var(--magenta); }
+  .cta-final .btn-primary:hover { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+  .cta-final .btn-ghost { color: var(--cream); border-color: var(--cream); }
+  .cta-final .btn-ghost:hover { background: var(--cream); color: var(--ink); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--ink);
+    color: var(--mute-dark);
+    padding: 64px 48px 40px;
+    font-size: 13px;
+  }
+  footer .container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(247,243,234,.1);
+  }
+  footer h5 {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: var(--cream);
+    margin-bottom: 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  footer .brand-foot {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--cream);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  footer p, footer a {
+    color: var(--mute-dark);
+    text-decoration: none;
+    line-height: 1.8;
+    font-size: 13px;
+  }
+  footer a:hover { color: var(--magenta-soft); }
+  footer ul { list-style: none; }
+  footer .copy {
+    padding-top: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1280px; margin: 0 auto;
+  }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 960px) {
+    nav.top { padding: 18px 24px; }
+    nav.top .links { display: none; }
+    section { padding: 88px 24px; }
+    .hero { padding: 140px 24px 60px; }
+    .hero .meta-row { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .hero .flourish { display: none; }
+    .problem-grid, .moat-grid, .trust-grid, .audience-grid { grid-template-columns: 1fr; gap: 48px; }
+    .problem-quote { position: static; }
+    .offering.wide, .offering.tall, .offering.third, .offering.half { grid-column: span 12; }
+    .arch-row { grid-template-columns: 1fr; gap: 24px; }
+    .arch-bridge { margin: 0 auto; transform: rotate(90deg); }
+    .stories-grid, .together-grid, .biz-grid, .scale-metrics { grid-template-columns: 1fr; }
+    .scale-metrics { gap: 24px; }
+    .how-step { grid-template-columns: 1fr; gap: 16px; }
+    .how-step .n { font-size: 64px; }
+    .testimonial blockquote, .testimonial .attrib { margin-left: 0; margin-top: 32px; }
+    footer .container { grid-template-columns: 1fr 1fr; }
+    .scale-proof { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top">
+  <div class="brand">
+    <span class="pill">Strategic Partnership</span>
+    Suman TV × MyPursu
+  </div>
+  <div class="links">
+    <a href="#problem">Problem</a>
+    <a href="#solution">Architecture</a>
+    <a href="#scale">Scale</a>
+    <a href="#together">What We Do</a>
+    <a href="#partner">Partnership</a>
+  </div>
+  <a href="#partner" class="cta">Partner With Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="flourish">
+    <svg viewBox="0 0 540 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="270" cy="270" r="260" stroke="#e6007e" stroke-width="0.6" stroke-dasharray="2 6" opacity="0.3"/>
+      <circle cx="270" cy="270" r="200" stroke="#c79a3a" stroke-width="0.6" opacity="0.3"/>
+      <circle cx="270" cy="270" r="140" stroke="#e6007e" stroke-width="0.6" opacity="0.35"/>
+      <circle cx="270" cy="270" r="80" stroke="#c79a3a" stroke-width="1" opacity="0.6"/>
+      <path d="M270 10 L270 530 M10 270 L530 270" stroke="#c79a3a" stroke-width="0.4" opacity="0.2"/>
+      <path d="M78 78 L462 462 M462 78 L78 462" stroke="#e6007e" stroke-width="0.4" opacity="0.15"/>
+      <circle cx="270" cy="270" r="5" fill="#c79a3a"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="chapter reveal">A Strategic Partnership · 2026</div>
+    <h1 class="reveal">
+      Managing life in <em>India</em>—<br>
+      from <span class="underline">anywhere</span> in the world.
+    </h1>
+    <p class="lede reveal">
+      India's most trusted Telugu media network meets a purpose-built NRI concierge platform.
+      Together, we create the life management ecosystem that NRIs have been waiting for—
+      combining massive reach, hyperlocal influence, and on-ground execution.
+    </p>
+    <div class="cta-row reveal">
+      <a href="#solution" class="btn-primary">
+        Explore the Platform
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#partner" class="btn-ghost">
+        Partner With Us
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg>
+      </a>
+    </div>
+
+    <div class="meta-row reveal">
+      <div class="item">
+        <div class="k">Monthly Reach</div>
+        <div class="v"><strong>300 Crore+</strong><br>views per month</div>
+      </div>
+      <div class="item">
+        <div class="k">Audience</div>
+        <div class="v"><strong>10 Crore+</strong><br>engaged subscribers</div>
+      </div>
+      <div class="item">
+        <div class="k">Digital Network</div>
+        <div class="v"><strong>500+</strong><br>channels & pages</div>
+      </div>
+      <div class="item">
+        <div class="k">Recognition</div>
+        <div class="v"><strong>100+</strong><br>Google & YouTube awards</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 01 — The Disconnection</div>
+      <h2>Life back home requires a <em>dozen different tools.</em><br>Families deserve one.</h2>
+      <p class="sub">
+        For the modern NRI, staying connected to India is a daily logistics problem
+        disguised as an emotional one. Eight thousand miles, thirteen time zones,
+        and no single trusted hand on the ground.
+      </p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-quote reveal">
+        <span>"Every month I'm calling four different relatives, three apps,</span>
+        <span class="accent"> and praying someone answers.</span>
+        <span> I just want to know my parents are okay."</span>
+        <span class="attrib">— Composite from NRI interviews, 2026</span>
+      </div>
+
+      <div class="friction-list">
+        <div class="friction-item reveal">
+          <div class="num">01</div>
+          <div>
+            <h4>No Indian phone or bank</h4>
+            <p>Locked out of the UPI revolution. Forced to carry cash, wire money through relatives, or delay routine payments for weeks.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#0a1324" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg></div>
+        </div>
+        <div class="friction-item reveal">
+          <div class="num">02</div>
+          <div>
+            <h4>Medical emergencies, 8,000 miles away</h4>
+            <p>A late-night call about a parent's fall, a hospital admission, a prescription that needs filling. No verified local contact to respond.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#0a1324" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg></div>
+        </div>
+        <div class="friction-item reveal">
+          <div class="num">03</div>
+          <div>
+            <h4>Logistical nightmares</h4>
+            <p>Blind spots in international shipping, unreliable local couriers, property documents that require physical presence, and receipts lost in translation.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#0a1324" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg></div>
+        </div>
+        <div class="friction-item reveal">
+          <div class="num">04</div>
+          <div>
+            <h4>Fragmented care & coordination</h4>
+            <p>Utility bills, health insurance, elder care, weddings, pujas, property management—nine apps and zero continuity between them.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#0a1324" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg></div>
+        </div>
+        <div class="friction-item reveal">
+          <div class="num">05</div>
+          <div>
+            <h4>The trust deficit</h4>
+            <p>Without a verified name behind the service, every introduction is a risk. Without a face on the ground, every transaction is a leap of faith.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#0a1324" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION / ARCHITECTURE -->
+<section class="solution" id="solution">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" style="color: var(--gold);">Chapter 02 — The Architecture</div>
+      <h2>Two institutions. <em>One ecosystem.</em></h2>
+      <p class="sub">
+        India's largest regional digital network meets a fully-operational NRI concierge
+        platform. Each is formidable alone. Together, they create something that no
+        single player can replicate.
+      </p>
+    </div>
+
+    <div class="arch-diagram">
+      <div class="arch-row">
+        <div class="arch-pillar pink reveal">
+          <div class="tag">The Influence Layer</div>
+          <h3>Suman TV Network</h3>
+          <p>India's largest regional digital media network. The most influential voice in Telugu hyperlocal markets, with deep penetration into the homes, healthcare, and purchase decisions of millions of families across AP, Telangana, and the global Telugu diaspora.</p>
+          <div class="stats">
+            <div class="stat"><div class="n">300 Cr+</div><div class="l">Monthly Views</div></div>
+            <div class="stat"><div class="n">10 Cr+</div><div class="l">Subscribers</div></div>
+            <div class="stat"><div class="n">500+</div><div class="l">Channels & Pages</div></div>
+            <div class="stat"><div class="n">100+</div><div class="l">G & YT Awards</div></div>
+          </div>
+        </div>
+        <div class="arch-bridge reveal"><span>+</span></div>
+        <div class="arch-pillar gold reveal">
+          <div class="tag">The Execution Layer</div>
+          <h3>MyPursu Platform</h3>
+          <p>A fully-built NRI concierge and financial services platform. UPI payments across 55M+ merchants, end-to-end logistics, remote elder care, property management, travel bookings, and dual-country KYC compliance—live and operating since 2020.</p>
+          <div class="stats">
+            <div class="stat"><div class="n">55M+</div><div class="l">UPI Merchants</div></div>
+            <div class="stat"><div class="n">99%</div><div class="l">Instant KYC</div></div>
+            <div class="stat"><div class="n">5.0★</div><div class="l">App Store Rating</div></div>
+            <div class="stat"><div class="n">Dual</div><div class="l">Country Compliance</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-base reveal">
+        <div class="label">The Combined Outcome</div>
+        <h3>The NRI Life Management Ecosystem — influence upstream, execution downstream, one continuous connection home.</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMAN TV SCALE (correct numbers) -->
+<section class="scale" id="scale">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 03 — The Reach</div>
+      <h2>Scale that <em>brands trust.</em><br>Influence that <em>converts.</em></h2>
+      <p class="sub">
+        This isn't just audience. This is strategic influence in the Telugu hyperlocal markets
+        and the global diaspora that flows from them—the most powerful distribution engine
+        available to an NRI services partnership.
+      </p>
+    </div>
+
+    <div class="scale-hero reveal">
+      <div class="big">300<sup>Cr+</sup></div>
+      <div class="big-label">Monthly Views Across the Network</div>
+    </div>
+
+    <div class="scale-metrics">
+      <div class="scale-metric accent reveal">
+        <div class="v">10 Cr+</div>
+        <div class="l">Engaged subscribers and followers across digital platforms</div>
+      </div>
+      <div class="scale-metric accent reveal">
+        <div class="v">10 Cr+</div>
+        <div class="l">Views every single day, not just monthly aggregate</div>
+      </div>
+      <div class="scale-metric reveal">
+        <div class="v">500+</div>
+        <div class="l">Digital channels and pages under the network umbrella</div>
+      </div>
+      <div class="scale-metric reveal">
+        <div class="v">100+</div>
+        <div class="l">Rewards from Google & YouTube recognizing scale and quality</div>
+      </div>
+    </div>
+
+    <div class="scale-proof reveal">
+      <div class="copy">
+        From a single channel in 2015 to <em>India's largest regional digital network</em> today —
+        with flagship IPs including the Suman TV Doctor Awards (500+ doctors honored) and the
+        Suman TV Real Estate Expo.
+      </div>
+      <div class="badge">The Voice That Matters</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="audience">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 04 — The Audience</div>
+      <h2>The decision-makers <em>who control the wallet.</em></h2>
+      <p class="sub">
+        Suman TV's audience isn't just large—it's the exact psychographic profile
+        an NRI services partnership needs. These are buyers, influencers, and household
+        decision-makers, not passive viewers.
+      </p>
+    </div>
+
+    <div class="audience-grid">
+      <div class="audience-viz reveal">
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#e6007e"/>
+              <stop offset="100%" stop-color="#ff3a9a"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Donut chart - 45% women -->
+          <circle cx="200" cy="200" r="120" stroke="#efe8d8" stroke-width="24" fill="none"/>
+          <circle cx="200" cy="200" r="120" stroke="url(#pinkGrad)" stroke-width="24" fill="none"
+                  stroke-dasharray="339.29 753.98" stroke-dashoffset="0" transform="rotate(-90 200 200)"
+                  stroke-linecap="round"/>
+
+          <!-- Center label -->
+          <text x="200" y="195" text-anchor="middle" font-family="Fraunces, serif" font-size="56" font-weight="400" fill="#0a1324" letter-spacing="-0.02em">45%</text>
+          <text x="200" y="225" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#5b6477" letter-spacing="2">WOMEN</text>
+
+          <!-- Label: Aged 25-54 -->
+          <text x="200" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#e6007e" letter-spacing="2.5">AGED 25—54 · HIGHEST SPEND</text>
+
+          <!-- Decorative ring -->
+          <circle cx="200" cy="200" r="150" stroke="#c79a3a" stroke-width="0.4" stroke-dasharray="2 4" opacity="0.4"/>
+          <circle cx="200" cy="200" r="180" stroke="#c79a3a" stroke-width="0.3" opacity="0.3"/>
+        </svg>
+      </div>
+
+      <div class="audience-list reveal">
+        <h3>Not just viewers. Buyers, influencers, decision-makers.</h3>
+        <p>
+          Suman TV's audience skews heavily toward the demographics that actually
+          make purchase decisions for health services, financial products, real estate,
+          and family logistics. When the conversation happens on Suman TV, the decision
+          usually follows.
+        </p>
+
+        <div class="audience-pills">
+          <div class="aud-pill">
+            <div class="tag">Vertical 01</div>
+            <div class="title">Health & Expert Credibility</div>
+            <div class="desc">Trusted medical content that shapes treatment & hospital decisions</div>
+          </div>
+          <div class="aud-pill">
+            <div class="tag">Vertical 02</div>
+            <div class="title">Women-Centric</div>
+            <div class="desc">Primary wallet-holders for home, health, lifestyle & family</div>
+          </div>
+          <div class="aud-pill">
+            <div class="tag">Vertical 03</div>
+            <div class="title">Business & Finance</div>
+            <div class="desc">Decision-grade content for entrepreneurs & professionals</div>
+          </div>
+          <div class="aud-pill">
+            <div class="tag">Vertical 04</div>
+            <div class="title">Culture & Celebrity</div>
+            <div class="desc">Deep emotional connection with Telugu identity & community</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES (MyPursu platform offerings for NRIs) -->
+<section class="offerings">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 05 — The Platform Services</div>
+      <h2>One app. <em>Every thread</em> that ties you to home.</h2>
+      <p class="sub">
+        From a parent's hospital visit to a wedding in the village, from a UPI scan at a chai stall
+        to managing an ancestral plot—the full surface area of Indian life, managed remotely
+        through the MyPursu platform.
+      </p>
+    </div>
+
+    <div class="offering-grid">
+      <div class="offering wide reveal">
+        <div class="idx">A · 01</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M24 8v32M16 14h12a4 4 0 010 8H20a4 4 0 000 8h12"/>
+        </svg>
+        <h3>Financial & Payment Passport</h3>
+        <p>Fund in USD, spend in INR. Scan &amp; Pay 55M+ UPI merchants without an Indian SIM or bank account. Real-time transparent exchange rates. Remote bill payments for family utilities. The 1cc Travel Health Card for medical safety.</p>
+        <ul>
+          <li>UPI for travelers</li>
+          <li>International remittance</li>
+          <li>Remote utility bill management</li>
+          <li>1cc Travel Health Card</li>
+        </ul>
+      </div>
+
+      <div class="offering tall reveal">
+        <div class="idx">B · 02</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M24 26a8 8 0 100-16 8 8 0 000 16zM10 42c0-7.7 6.3-14 14-14s14 6.3 14 14"/>
+        </svg>
+        <h3>Family & Elder Support</h3>
+        <p>Trusted on-ground teams for essential care, documentation, and emergency response. A verified name at the door when you need one.</p>
+        <ul>
+          <li>Scheduled elder care visits</li>
+          <li>Hospital coordination</li>
+          <li>Emergency response</li>
+        </ul>
+      </div>
+
+      <div class="offering third reveal">
+        <div class="idx">C · 03</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <rect x="8" y="14" width="32" height="24" rx="2"/>
+          <path d="M8 22h32M18 30h4"/>
+        </svg>
+        <h3>Logistics & Mail</h3>
+        <p>Personal Indian mailbox address, end-to-end Pack &amp; Ship with real-time tracking, and doorstep delivery in the US.</p>
+        <ul>
+          <li>Free Indian mailbox</li>
+          <li>International Pack & Ship</li>
+        </ul>
+      </div>
+
+      <div class="offering third reveal">
+        <div class="idx">D · 04</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M24 6v12M24 30v12M6 24h12M30 24h12"/>
+          <circle cx="24" cy="24" r="6"/>
+        </svg>
+        <h3>Healthcare Access</h3>
+        <p>Doctor network, hospital partnerships, and the 1cc Travel Health Card—an all-in-one medical safety net for families and visitors.</p>
+        <ul>
+          <li>Verified hospital partners</li>
+          <li>Travel health coverage</li>
+        </ul>
+      </div>
+
+      <div class="offering third reveal">
+        <div class="idx">E · 05</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M10 38l14-28 14 28M16 30h16"/>
+        </svg>
+        <h3>Cultural & Spiritual</h3>
+        <p>Astrology consultations, jatakam, vastu guidance, and puja services coordinated with verified pandits—the Indian life that technology usually leaves out.</p>
+        <ul>
+          <li>Verified pandit network</li>
+          <li>Remote puja coordination</li>
+        </ul>
+      </div>
+
+      <div class="offering half reveal">
+        <div class="idx">F · 06</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M8 40l8-20 8 8 8-12 8 24"/>
+          <circle cx="38" cy="12" r="3"/>
+        </svg>
+        <h3>Property Management</h3>
+        <p>Remote oversight of Indian real estate assets. Tenant coordination, documentation, local inspections, and transparent reporting—so your plot in Shankarpally or your flat in Kokapet doesn't become someone else's problem.</p>
+        <ul>
+          <li>On-ground inspections</li>
+          <li>Tenant & rental coordination</li>
+          <li>Documentation assistance</li>
+        </ul>
+      </div>
+
+      <div class="offering half reveal">
+        <div class="idx">G · 07</div>
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M24 8l6 12 14 2-10 10 2 14-12-6-12 6 2-14L4 22l14-2z"/>
+        </svg>
+        <h3>Events & Travel</h3>
+        <p>Weddings, family functions, and milestone moments—planned, sourced, and executed on the ground. Plus flights, hotels, cabs, and instant eSIM connectivity for the trips home.</p>
+        <ul>
+          <li>End-to-end event planning</li>
+          <li>Travel bookings with NRI pricing</li>
+          <li>Instant eSIM activation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DO TOGETHER - THE PARTNERSHIP SERVICES -->
+<section class="together" id="together">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 06 — What the Partnership Delivers</div>
+      <h2>Nine things <em>only we</em> can do together.</h2>
+      <p class="sub">
+        Suman TV supplies influence, storytelling, and trusted audience access.
+        MyPursu supplies the technology, compliance, and on-ground execution.
+        Here's what the two deliver that neither could alone.
+      </p>
+    </div>
+
+    <div class="together-grid">
+      <!-- Row 1 -->
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>NRI Audience Activation</h4>
+        <p>Launch a dedicated NRI-focused content vertical across Suman TV's digital network, built to convert diaspora attention into platform sign-ups with full-funnel measurement.</p>
+        <ul class="deliverables">
+          <li>Dedicated NRI YouTube vertical & Shorts strategy</li>
+          <li>Anchor-led storytelling & live integrations</li>
+          <li>Attribution dashboard from view to KYC-complete</li>
+        </ul>
+      </div>
+
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Hospital & Healthcare Program</h4>
+        <p>Leverage the Suman TV Doctor Awards IP and MyPursu's 1cc Travel Health Card to create a verified hospital network specifically for NRI families—from discovery to admission.</p>
+        <ul class="deliverables">
+          <li>Verified hospital partner panel</li>
+          <li>NRI family admission & coordination SOPs</li>
+          <li>1cc Health Card as the medical passport</li>
+        </ul>
+      </div>
+
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Real Estate Concierge</h4>
+        <p>Translate the Suman TV Real Estate Expo — already a high-intent marketplace — into a remote buying, inspection, and management service for NRIs eyeing Hyderabad, Bengaluru, and Andhra micro-markets.</p>
+        <ul class="deliverables">
+          <li>Curated NRI property showcases</li>
+          <li>Remote site visits & inspection videos</li>
+          <li>End-to-end documentation assistance</li>
+        </ul>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Elder Care at Scale</h4>
+        <p>Media-driven awareness meets ground-network execution. Launch a subscription elder-care offering visible across Suman TV's women-centric content — where the decisions about aging parents actually get made.</p>
+        <ul class="deliverables">
+          <li>Monthly wellness visit packages</li>
+          <li>Emergency response protocol</li>
+          <li>Family reporting dashboards</li>
+        </ul>
+      </div>
+
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Events, Weddings & Occasions</h4>
+        <p>From destination weddings in the village to milestone birthdays at the farmhouse — Suman TV's cultural content credibility and MyPursu's vendor coordination create a turnkey event concierge for NRI families.</p>
+        <ul class="deliverables">
+          <li>End-to-end event production</li>
+          <li>Verified vendor & pandit network</li>
+          <li>Remote planning with on-ground delivery</li>
+        </ul>
+      </div>
+
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Financial Services Onboarding</h4>
+        <p>Pair MyPursu's dual-country KYC and UPI-for-travelers with Suman TV's financial content programming — educating the diaspora on remittance, insurance, and investment options they can actually use.</p>
+        <ul class="deliverables">
+          <li>NRI financial literacy series</li>
+          <li>Co-branded remittance promotions</li>
+          <li>Insurance & investment product intros</li>
+        </ul>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Brand Partnerships & Sponsorships</h4>
+        <p>Open the platform to third-party brands — hospitals, FMCG, real estate, financial services — looking to reach the NRI wallet. Suman TV delivers the audience; MyPursu delivers measurable conversion.</p>
+        <ul class="deliverables">
+          <li>Co-branded campaign packages</li>
+          <li>Sponsored service bundles for users</li>
+          <li>Performance-based revenue share</li>
+        </ul>
+      </div>
+
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Cultural & Spiritual Services</h4>
+        <p>A verified network of pandits, astrologers, and ritual specialists — introduced through Suman TV's cultural programming, delivered through MyPursu's booking and payment rails.</p>
+        <ul class="deliverables">
+          <li>Vetted pandit & astrologer directory</li>
+          <li>Remote puja streaming & coordination</li>
+          <li>Jatakam, vastu, and occasion bookings</li>
+        </ul>
+      </div>
+
+      <div class="tg-cell reveal">
+        <div class="pair">
+          <span class="chip stv">Suman TV</span>
+          <span class="chip mp">MyPursu</span>
+        </div>
+        <h4>Community & Diaspora Engagement</h4>
+        <p>Build the first true NRI community layer on top of the ecosystem — live town halls, diaspora events, AMA sessions with doctors, lawyers, and financial experts — hosted by Suman TV anchors.</p>
+        <ul class="deliverables">
+          <li>Virtual town halls & live AMAs</li>
+          <li>NRI user meetups in major diaspora cities</li>
+          <li>Annual flagship NRI summit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOAT / COMBINED ADVANTAGE -->
+<section class="moat">
+  <div class="container">
+    <div class="moat-grid">
+      <div class="visual reveal">
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="glow2">
+              <stop offset="0%" stop-color="#ff3a9a" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#ff3a9a" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="goldglow">
+              <stop offset="0%" stop-color="#e5b94c" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#e5b94c" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="200" cy="200" r="190" fill="url(#glow2)"/>
+          <circle cx="200" cy="200" r="140" fill="url(#goldglow)"/>
+          <circle cx="200" cy="200" r="180" stroke="#e6007e" stroke-width="0.5" stroke-dasharray="2 4" opacity="0.4"/>
+          <circle cx="200" cy="200" r="130" stroke="#c79a3a" stroke-width="0.5" opacity="0.3"/>
+          <circle cx="200" cy="200" r="80"  stroke="#e6007e" stroke-width="0.5" opacity="0.4"/>
+
+          <!-- Spokes -->
+          <g stroke="#c79a3a" stroke-width="0.6" opacity="0.35">
+            <line x1="200" y1="200" x2="200" y2="20"/>
+            <line x1="200" y1="200" x2="360" y2="100"/>
+            <line x1="200" y1="200" x2="380" y2="260"/>
+            <line x1="200" y1="200" x2="300" y2="370"/>
+            <line x1="200" y1="200" x2="100" y2="360"/>
+            <line x1="200" y1="200" x2="30" y2="280"/>
+            <line x1="200" y1="200" x2="40" y2="120"/>
+            <line x1="200" y1="200" x2="120" y2="40"/>
+          </g>
+
+          <!-- Outer nodes (global NRI hubs) -->
+          <g fill="#ff3a9a">
+            <circle cx="200" cy="20" r="4"/>
+            <circle cx="360" cy="100" r="4"/>
+            <circle cx="380" cy="260" r="4"/>
+            <circle cx="300" cy="370" r="4"/>
+            <circle cx="100" cy="360" r="4"/>
+            <circle cx="30" cy="280" r="4"/>
+            <circle cx="40" cy="120" r="4"/>
+            <circle cx="120" cy="40" r="4"/>
+          </g>
+
+          <!-- Inner nodes (AP/TG districts) -->
+          <g fill="#e5b94c">
+            <circle cx="260" cy="150" r="3"/>
+            <circle cx="140" cy="170" r="3"/>
+            <circle cx="240" cy="270" r="3"/>
+            <circle cx="150" cy="260" r="3"/>
+            <circle cx="200" cy="130" r="3"/>
+            <circle cx="130" cy="215" r="3"/>
+            <circle cx="270" cy="220" r="3"/>
+            <circle cx="200" cy="275" r="3"/>
+          </g>
+
+          <!-- Central node -->
+          <circle cx="200" cy="200" r="14" fill="#e6007e"/>
+          <circle cx="200" cy="200" r="26" stroke="#e6007e" stroke-width="1" opacity="0.5"/>
+          <circle cx="200" cy="200" r="42" stroke="#e6007e" stroke-width="0.5" opacity="0.3"/>
+
+          <text x="200" y="395" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#ff3a9a" letter-spacing="2">NETWORK × DIASPORA</text>
+        </svg>
+      </div>
+
+      <div class="copy reveal">
+        <div class="eyebrow" style="color: var(--magenta-soft); font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 28px; display: flex; align-items: center; gap: 14px;">
+          <span style="width: 36px; height: 1px; background: var(--magenta-soft);"></span>
+          Chapter 07 — The Moat
+        </div>
+        <h3>Hyperlocal dominance. <em>Global diaspora.</em></h3>
+        <p>
+          Suman TV already owns the most influential digital media network in the Telugu
+          hyperlocal markets, with strong NRI viewership across the US, UK, Gulf, Singapore,
+          and Australia. Expansion into Kannada is underway; Tamil and Hindi markets are next.
+        </p>
+        <p>
+          The partnership doesn't need to build an audience. It already has one — engaged daily,
+          loyal for years, and primed to convert. What MyPursu adds is the infrastructure to
+          turn that attention into recurring, measurable service revenue.
+        </p>
+
+        <div class="moat-stats">
+          <div class="moat-stat">
+            <div class="v">#1</div>
+            <div class="l">Telugu digital media network</div>
+          </div>
+          <div class="moat-stat">
+            <div class="v">5+</div>
+            <div class="l">Global NRI viewership hubs</div>
+          </div>
+          <div class="moat-stat">
+            <div class="v">3</div>
+            <div class="l">Language expansions underway</div>
+          </div>
+          <div class="moat-stat">
+            <div class="v">8 yrs</div>
+            <div class="l">Of compounded audience trust</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 08 — The Flow</div>
+      <h2>From <em>discovery</em> to <em>delivery</em>, in four movements.</h2>
+      <p class="sub">One continuous journey across two continents, held together by a single verified identity and a trusted face on the ground.</p>
+    </div>
+
+    <div class="how-flow">
+      <div class="how-step reveal">
+        <div class="n">01</div>
+        <div>
+          <div class="tag">Discover</div>
+          <h4>Media as introduction</h4>
+        </div>
+        <p>Suman TV content — news, health, lifestyle, culture — surfaces the service to families already in the network's orbit. NRIs arrive through a name they already trust, not a cold ad. CAC drops by an order of magnitude.</p>
+      </div>
+
+      <div class="how-step reveal">
+        <div class="n">02</div>
+        <div>
+          <div class="tag">Connect</div>
+          <h4>Dual-country KYC in seconds</h4>
+        </div>
+        <p>A single onboarding across US and Indian identity documents. Ninety-nine percent of verifications complete instantly. One profile, two jurisdictions, zero paperwork at embassies.</p>
+      </div>
+
+      <div class="how-step reveal">
+        <div class="n">03</div>
+        <div>
+          <div class="tag">Coordinate</div>
+          <h4>One dashboard, every service</h4>
+        </div>
+        <p>Send money, pay bills, schedule an elder care visit, ship a parcel, book a puja, or flag a property inspection — all from one interface. One-to-many on the technology side, many-to-one on the care side.</p>
+      </div>
+
+      <div class="how-step reveal">
+        <div class="n">04</div>
+        <div>
+          <div class="tag">Execute</div>
+          <h4>A real hand on the ground</h4>
+        </div>
+        <p>The network delivers. A verified agent, a partner hospital, a vetted pandit, a Suman-TV-endorsed vendor. The request closes in India; the confirmation lands in the US. The family doesn't have to be the middleman anymore.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="stories">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 09 — In Practice</div>
+      <h2>What this <em>actually feels like</em> on a Tuesday.</h2>
+      <p class="sub">Three composite stories drawn from the problems NRI families solve — or fail to solve — every week.</p>
+    </div>
+
+    <div class="stories-grid">
+      <div class="story reveal">
+        <div class="quote-mark">"</div>
+        <h4>The 2 AM hospital call, handled before sunrise.</h4>
+        <p>A daughter in New Jersey gets a call: her father has fallen in Vijayawada. Within ninety minutes, a verified concierge has reached the hospital, confirmed his admission, handled initial paperwork, coordinated with a Suman TV Doctor Awards partner physician, and sent a photo update. She books her flight without panicking.</p>
+        <div class="signature">
+          <span>Scenario · Medical</span>
+          <span class="dest">NJ → Vijayawada</span>
+        </div>
+      </div>
+
+      <div class="story reveal">
+        <div class="quote-mark">"</div>
+        <h4>A wedding in the village, planned from California.</h4>
+        <p>A son in Fremont wants to host his parents' 50th anniversary in their ancestral village. Event coordination, pandit booking, catering vendors, local transport, family invitations, and remittances for everything — scheduled through a single platform with ground presence in the district. He flies in for the ceremony, not the logistics.</p>
+        <div class="signature">
+          <span>Scenario · Event</span>
+          <span class="dest">Fremont → Guntur district</span>
+        </div>
+      </div>
+
+      <div class="story reveal">
+        <div class="quote-mark">"</div>
+        <h4>Parents, supported continuously — not just during emergencies.</h4>
+        <p>Monthly elder care visits, utility bills on autopay, quarterly property inspections, a birthday gift ordered on an Indian e-commerce site and shipped to the parents' doorstep via the platform's mailbox address. The background hum of a life managed, so the foreground can be love.</p>
+        <div class="signature">
+          <span>Scenario · Ongoing Care</span>
+          <span class="dest">London → Hyderabad</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-copy reveal">
+        <div class="eyebrow" style="font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--magenta); margin-bottom: 28px; display: flex; align-items: center; gap: 14px;">
+          <span style="width: 36px; height: 1px; background: var(--magenta);"></span>
+          Chapter 10 — Trust
+        </div>
+        <h3>The only metric that <em>compounds</em> in this business.</h3>
+        <p>
+          NRI services are a word-of-mouth industry. A wrong move with someone's parent
+          ends the relationship for a family and, often, for the broader community around it.
+          Trust is the only real barrier to entry — and the only real moat once built.
+        </p>
+        <p>
+          The partnership layers three kinds of trust: institutional (a public media brand
+          with 8+ years of responsible content), regulatory (dual-country KYC, compliant
+          remittance), and relational (a verified local face the family recognizes).
+        </p>
+
+        <div class="trust-tiles">
+          <div class="trust-tile">
+            <div class="n">500<span class="u">+</span></div>
+            <div class="l">Doctors honored via Suman TV Doctor Awards</div>
+          </div>
+          <div class="trust-tile">
+            <div class="n">5.0<span class="u">★</span></div>
+            <div class="l">MyPursu App Store rating across reported reviews</div>
+          </div>
+          <div class="trust-tile">
+            <div class="n">Zero<span class="u"></span></div>
+            <div class="l">Platform fees through Sep 30, 2026 — full value to users</div>
+          </div>
+          <div class="trust-tile">
+            <div class="n">24/7<span class="u"></span></div>
+            <div class="l">Concierge support with dedicated Premium agents</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="testimonial">
+          <blockquote>
+            A lifesaver. Didn't need an Indian SIM or bank account, yet I made UPI
+            payments everywhere — from local chai stalls to big retail outlets. End-to-end
+            assistance with airport transfers, local help, and a warm, reliable interface
+            specially designed for NRIs.
+          </blockquote>
+          <div class="attrib">— Composite from verified user reviews · App Store</div>
+        </div>
+
+        <div style="margin-top: 48px; padding: 32px; border: 1px solid var(--rule); background: var(--cream);">
+          <div style="font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mute); margin-bottom: 18px;">Flagship IPs & Verification</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px 24px; font-family: 'Fraunces'; font-size: 15px; color: var(--ink);">
+            <span>Suman TV Doctor Awards</span>
+            <span style="color: var(--mute);">·</span>
+            <span>Real Estate Expo</span>
+            <span style="color: var(--mute);">·</span>
+            <span>Dual-country KYC</span>
+            <span style="color: var(--mute);">·</span>
+            <span>RBI-compliant remittance</span>
+            <span style="color: var(--mute);">·</span>
+            <span>Licensed insurance partners</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS MODEL / PARTNERSHIP -->
+<section class="biz" id="partner">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Chapter 11 — The Partnership</div>
+      <h2>Three revenue lines. <em>One shared ambition.</em></h2>
+      <p class="sub">
+        The model is transparent by design. Users pay for service value; partners share in
+        network economics; strategic collaborators plug into a distribution engine that was
+        built, not bought.
+      </p>
+    </div>
+
+    <div class="biz-grid">
+      <div class="biz-col pink reveal">
+        <div class="tag">Revenue Stream 01</div>
+        <h4>Tiered Concierge Membership</h4>
+        <p>Starter, Essential, and Premium tiers aligned to remittance volume and service depth. Zero platform fees through September 30, 2026 — accelerating acquisition during the partnership ramp.</p>
+        <ul>
+          <li>Starter · up to $100</li>
+          <li>Essential · $100–$500</li>
+          <li>Premium · above $500 (dedicated agent)</li>
+        </ul>
+      </div>
+
+      <div class="biz-col gold reveal">
+        <div class="tag">Revenue Stream 02</div>
+        <h4>Service & Merchant Economics</h4>
+        <p>Transaction-based monetization on remittance spread, logistics margin, travel commissions, and commerce flows through the mailbox-to-door pipeline. A classic many-small-fees engine, priced fairly.</p>
+        <ul>
+          <li>Remittance FX spread</li>
+          <li>Pack & Ship logistics margin</li>
+          <li>Travel & hospitality commissions</li>
+          <li>Insurance referrals</li>
+        </ul>
+      </div>
+
+      <div class="biz-col reveal">
+        <div class="tag">Revenue Stream 03</div>
+        <h4>Media & Brand Partnerships</h4>
+        <p>Suman TV's brand-partnership model — including equity-driven partnerships for high-potential brands — extends to hospitals, diagnostic chains, real-estate operators, and premium service providers targeting NRIs.</p>
+        <ul>
+          <li>Hospital & clinic partnerships</li>
+          <li>Real estate & property services</li>
+          <li>Equity-share for high-potential brands</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-final">
+  <div style="position: relative;">
+    <svg class="ornament" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="0.8">
+      <circle cx="30" cy="30" r="28"/>
+      <circle cx="30" cy="30" r="18"/>
+      <path d="M30 6v48M6 30h48"/>
+    </svg>
+    <h2 class="reveal">
+      You need a partner, <em>not just a platform.</em>
+    </h2>
+    <p class="reveal">
+      Whether you're an NRI family, a hospital network, a service brand, or a strategic investor —
+      there's a seat at this table. Let's build the layer India has been missing.
+    </p>
+    <div class="cta-row reveal">
+      <a href="#" class="btn-primary">
+        Partner With Us
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="btn-ghost">
+        Book a Consultation
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M8 7h9v9"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div>
+      <div class="brand-foot">Suman TV × MyPursu</div>
+      <p>The NRI Life Management Ecosystem. A strategic partnership between India's largest regional digital media network and a purpose-built concierge platform, designed to hold the weight of families living across two continents.</p>
+    </div>
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#solution">Architecture</a></li>
+        <li><a href="#scale">Scale & Reach</a></li>
+        <li><a href="#together">Services</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Partnership</h5>
+      <ul>
+        <li><a href="#partner">Hospitals & Clinics</a></li>
+        <li><a href="#partner">Service Providers</a></li>
+        <li><a href="#partner">Investors</a></li>
+        <li><a href="#partner">Media Collaborators</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul>
+        <li>Hyderabad · Fremont · Indore</li>
+        <li>support@mypursu.com</li>
+        <li>+91 90100 09967</li>
+        <li>WhatsApp · 24/7</li>
+      </ul>
+    </div>
+  </div>
+  <div class="copy">
+    <span>© 2026 · Strategic Partnership Document</span>
+    <span>v2.0 · Apr 2026</span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('nav.top');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      nav.style.padding = '14px 48px';
+      nav.style.background = 'rgba(247, 243, 234, 0.92)';
+    } else {
+      nav.style.padding = '22px 48px';
+      nav.style.background = 'rgba(247, 243, 234, 0.72)';
+    }
+  });
+</script>
+
+</body>
+</html>
